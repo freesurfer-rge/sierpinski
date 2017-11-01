@@ -1,5 +1,6 @@
 SET( srcs test.cpp )
 LIST(APPEND srcs basictests.cpp)
+LIST(APPEND srcs test1d.cpp)
 
 SET( Sierpinski_Lib sierpinski )
 

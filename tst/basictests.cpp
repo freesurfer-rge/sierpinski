@@ -6,48 +6,27 @@
 
 // ========================================
 
-const size_t validSizes[] = { 1, 3, 9, 27, 81 };
-
-// ========================================
-
 BOOST_AUTO_TEST_SUITE( Basic )
 
-BOOST_DATA_TEST_CASE( SetAndGetLength, boost::unit_test::data::make( validSizes ), l )
+BOOST_AUTO_TEST_CASE( IntegerPowers )
 {
-  Sierpinski s;
+  BOOST_CHECK_EQUAL( static_cast<size_t>(1), Sierpinski::IntegerPower(2,0) );
+  BOOST_CHECK_EQUAL( static_cast<size_t>(1), Sierpinski::IntegerPower(3,0) );
+  BOOST_CHECK_EQUAL( static_cast<size_t>(1), Sierpinski::IntegerPower(5,0) );
+  
+  BOOST_CHECK_EQUAL( static_cast<size_t>(2), Sierpinski::IntegerPower(2,1) );
+  BOOST_CHECK_EQUAL( static_cast<size_t>(3), Sierpinski::IntegerPower(3,1) );
 
-  s.SetLength(l);
-  BOOST_CHECK_EQUAL(l, s.GetLength() );
-}
+  BOOST_CHECK_EQUAL( static_cast<size_t>(4), Sierpinski::IntegerPower(2,2) );
+  BOOST_CHECK_EQUAL( static_cast<size_t>(9), Sierpinski::IntegerPower(3,2) );
 
-BOOST_AUTO_TEST_CASE( SetZeroLength )
-{
-  Sierpinski s;
+  BOOST_CHECK_EQUAL( static_cast<size_t>(8), Sierpinski::IntegerPower(2,3) );
+  BOOST_CHECK_EQUAL( static_cast<size_t>(27), Sierpinski::IntegerPower(3,3) );
 
-  auto checkMsg = []( std::invalid_argument const& e ) {
-    return std::string("Must have value > 0") == e.what();
-  };
+  BOOST_CHECK_EQUAL( static_cast<size_t>(16), Sierpinski::IntegerPower(2,4) );
+  BOOST_CHECK_EQUAL( static_cast<size_t>(81), Sierpinski::IntegerPower(3,4) );
 
-  BOOST_CHECK_EXCEPTION( s.SetLength(0), std::invalid_argument, checkMsg );
-}
-
-BOOST_AUTO_TEST_CASE( SetNonPower3 )
-{
-  Sierpinski s;
-
-  auto checkMsg = []( std::invalid_argument const& e ) {
-    return std::string("Not a power of 3") == e.what();
-  };
-
-  BOOST_CHECK_EXCEPTION( s.SetLength(2), std::invalid_argument, checkMsg );
-  BOOST_CHECK_EXCEPTION( s.SetLength(4), std::invalid_argument, checkMsg );
-  BOOST_CHECK_EXCEPTION( s.SetLength(6), std::invalid_argument, checkMsg );
-  BOOST_CHECK_EXCEPTION( s.SetLength(7), std::invalid_argument, checkMsg );
-  BOOST_CHECK_EXCEPTION( s.SetLength(8), std::invalid_argument, checkMsg );
-  BOOST_CHECK_EXCEPTION( s.SetLength(10), std::invalid_argument, checkMsg );
-  BOOST_CHECK_EXCEPTION( s.SetLength(18), std::invalid_argument, checkMsg );
-  BOOST_CHECK_EXCEPTION( s.SetLength(26), std::invalid_argument, checkMsg );
-  BOOST_CHECK_EXCEPTION( s.SetLength(28), std::invalid_argument, checkMsg );
+  BOOST_CHECK_EQUAL( static_cast<size_t>(128), Sierpinski::IntegerPower(2,7) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -3,7 +3,7 @@ PROJECT(Sierpinski)
 
 # -----------
 
-SET(CMAKE_CXX_FLAGS "-g -std=c++11 -Wall -Wextra -Wno-unused-parameter")
+SET(CMAKE_CXX_FLAGS "-g -std=c++11 -Wall -Wextra -Werror -Wno-unused-local-typedef -Wno-unused-parameter")
 
 # -----------
 

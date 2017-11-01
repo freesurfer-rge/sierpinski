@@ -2,31 +2,11 @@
 
 #include <stdexcept>
 
-class Sierpinski {
-public:
-  void SetLength( const size_t l );
-  size_t GetLength() const;
+#include "boost/multi_array.hpp"
+
+namespace Sierpinski {
+  size_t IntegerPower( const size_t x, const size_t n );
   
-private:
-  size_t length;
+  boost::multi_array<bool,1> Create1D( const size_t depth );
+}
 
-  const size_t factor = 3;
-
-  bool CheckPowerFactor( const size_t value ) const {
-    if( value == 0 ) {
-      throw std::invalid_argument("Must have value > 0");
-    }
-    
-    size_t current = value;
-
-    while( current > 1 ) {
-      if( (current % Sierpinski::factor) != 0 ) {
-	return false;
-      }
-
-      current /= factor;
-    }
-
-    return true;
-  }
-};
