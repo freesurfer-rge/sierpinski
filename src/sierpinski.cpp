@@ -34,6 +34,20 @@ namespace Sierpinski {
 
     return( (counts[1]==0) || (counts[1]==2) );
   }
+
+  bool CheckStencil( const size_t z, const size_t y, const size_t x ) {
+    unsigned int counts[factor] = {0,0,0};
+
+    counts[x]++;
+    counts[y]++;
+    counts[z]++;
+
+    return( (counts[1]==0) || (counts[1]==3) );
+  }
+
+  size_t ReduceCoord( const size_t scale, const size_t val ) {
+    return (val / scale) % factor;
+  }
   
   boost::multi_array<bool,1> Create1D( const size_t depth ) {
     if( depth > floor(log(std::numeric_limits<size_t>::max()) / log(factor)) ) {
@@ -48,7 +62,7 @@ namespace Sierpinski {
       
       size_t currScale = nVals / factor;
       while( (currScale > 0) && currValue ) {
-	currValue = currValue && CheckStencil( (i / currScale) % factor );
+	currValue = currValue && CheckStencil( ReduceCoord(currScale,i) );
 	currScale /= factor;
       }
       
@@ -72,7 +86,9 @@ namespace Sierpinski {
 
 	size_t currScale = nVals / factor;
 	while( (currScale>0) && currValue ) {
-	  currValue = currValue && CheckStencil( (iy / currScale) % factor, (ix / currScale) % factor );
+	  const size_t redy = ReduceCoord(currScale,iy);
+	  const size_t redx = ReduceCoord(currScale,ix);
+	  currValue = currValue && CheckStencil( redy, redx );
 	  currScale /= factor;
 	}
 
@@ -80,7 +96,36 @@ namespace Sierpinski {
       }
     }
     
+    return result;
+  }
 
+  boost::multi_array<bool,3> Create3D( const size_t depth ) {
+    if( depth > floor(log(std::numeric_limits<size_t>::max()) / log(factor)) ) {
+      throw std::invalid_argument("Depth too great");
+    }
+
+    const size_t nVals = IntegerPower(factor,depth);
+    boost::multi_array<bool,3> result(boost::extents[nVals][nVals][nVals]);
+
+    for( size_t iz=0; iz<nVals; iz++ ) {
+      for( size_t iy=0; iy<nVals; iy++ ) {
+	for( size_t ix=0; ix<nVals; ix++ ) {
+	  bool currValue = true;
+
+	  size_t currScale = nVals / factor;
+	  while( (currScale>0) && currValue ) {
+	    const size_t redz = ReduceCoord(currScale,iz);
+	    const size_t redy = ReduceCoord(currScale,iy);
+	    const size_t redx = ReduceCoord(currScale,ix);
+	    currValue = currValue && CheckStencil( redz, redy, redx );
+	    currScale /= factor;
+	  }
+	  
+	  result[iz][iy][ix] = currValue;
+	}
+      }
+    }
+    
     return result;
   }
 }

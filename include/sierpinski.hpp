@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include <stdexcept>
 
@@ -10,5 +10,7 @@ namespace Sierpinski {
   boost::multi_array<bool,1> Create1D( const size_t depth );
 
   boost::multi_array<bool,2> Create2D( const size_t depth );
+  
+  boost::multi_array<bool,3> Create3D( const size_t depth );
 }
 
